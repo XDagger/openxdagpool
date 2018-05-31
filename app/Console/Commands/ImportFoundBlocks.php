@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\Pool\{DataReader, Core};
+use App\Pool\{DataReader, Core, CoreCallException};
 use App\Pool\Config\{Parser as ConfigParser, Presenter as ConfigPresenter};
 use App\FoundBlocks\FoundBlock;
 use App\Payouts\Payout;
@@ -36,7 +36,13 @@ class ImportFoundBlocks extends Command
 
 		// import at most 20000 new found blocks / run
 		for ($i = 0; $i < 20000; $i++) {
-			$block_json = $core->call('block');
+			try {
+				$block_json = $core->call('block');
+			} catch (CoreCallException $ex) {
+				$this->line('Stopped importing blocks - unable to call core.');
+				break;
+			}
+
 			$block_json = @json_decode($block_json, true);
 
 			if ($block_json === false || $block_json === null) {
@@ -79,7 +85,13 @@ class ImportFoundBlocks extends Command
 
 		// invalidate at most 20000 found blocks / run
 		for ($i = 0; $i < 20000; $i++) {
-			$block_json = $core->call('blockInvalidated');
+			try {
+				$block_json = $core->call('blockInvalidated');
+			} catch (CoreCallException $ex) {
+				$this->line('Stopped invalidating found blocks - unable to call core.');
+				break;
+			}
+
 			$block_json = @json_decode($block_json, true);
 
 			if ($block_json === false) {

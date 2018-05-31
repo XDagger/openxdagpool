@@ -36,6 +36,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('data:live')->everyMinute()->withoutOverlapping();
 		$schedule->command('data:fast')->everyFiveMinutes()->withoutOverlapping();
 		$schedule->command('pool:cron')->everyFiveMinutes()->withoutOverlapping();
+		$schedule->command('blocks:import')->everyFiveMinutes()->withoutOverlapping();
 	}
 
 	/**
