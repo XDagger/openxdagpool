@@ -29,7 +29,7 @@ class Miner extends Model
 
 	public function payouts()
 	{
-		return $this->hasMany(Payout::class, 'recipient', 'address')->orderBy('id', 'asc');
+		return $this->hasMany(Payout::class, 'recipient', 'address')->orderBy('made_at', 'asc')->orderBy('id', 'asc');
 	}
 
 	/* attributes */
@@ -114,7 +114,7 @@ class Miner extends Model
 		return \DB::statement('SELECT "_Date and time" made_at, "Sender" sender, "Recipient" recipient, "Amount" amount
 			UNION ALL SELECT CONCAT(p.made_at, ".", LPAD(p.made_at_milliseconds, 3, "0")) made_at, b.address sender, p.recipient, p.amount FROM payouts p
 			LEFT JOIN found_blocks b on p.found_block_id = b.id WHERE p.recipient = ?
-			ORDER BY made_at ASC
+			ORDER BY made_at ASC, p.id ASC
 			INTO OUTFILE ' . \DB::getPdo()->quote($filename) . ' FIELDS TERMINATED BY "," ENCLOSED BY \'"\' LINES TERMINATED BY "\n"', [$this->address]);
 	}
 
