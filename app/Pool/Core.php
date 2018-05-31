@@ -21,7 +21,7 @@ class Core
 			throw new CoreCallException('Unable to obtain core_call lock.');
 		}
 
-		$data = @file_get_contents($url . '?' . http_build_query($arguments));
+		$data = @file_get_contents($url . '?' . http_build_query($arguments), false, stream_context_create(['http' => ['timeout' => 350]]));
 		if (!$data) {
 			$lock->release();
 			throw new CoreCallException('Unable to call openxdagpool-scripts core.');
