@@ -8,7 +8,7 @@ class FoundBlocksController extends Controller
 {
 	public function index()
 	{
-		$found_blocks = FoundBlock::orderBy('id', 'desc')->limit(150)->get();
+		$found_blocks = FoundBlock::orderBy('found_at', 'desc')->limit(150)->get();
 
 		return view('found-blocks.index', [
 			'activeTab' => 'found-blocks',
