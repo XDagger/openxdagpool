@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Pool\{DataReader, Core, CoreCallException};
-use App\Pool\Config\{Parser as ConfigParser, Presenter as ConfigPresenter};
+use App\Pool\Config\Parser as ConfigParser;
 use App\FoundBlocks\FoundBlock;
 use App\Payouts\Payout;
 
@@ -27,7 +27,7 @@ class ImportFoundBlocks extends Command
 	public function handle()
 	{
 		$core = new Core;
-		$config = new ConfigPresenter(new ConfigParser($this->reader->getLiveDataJson()));
+		$config = new ConfigParser($this->reader->getLiveDataJson());
 
 		// TODO: block reward may decrease in the future
 		$fee = 1024 * ($config->getFee() / 100);
