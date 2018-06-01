@@ -14,20 +14,24 @@ class Core
 
 		$arguments['operation'] = $operation;
 
-		try {
-			$lock = new ExclusiveLock($operation == 'balance' ? 'core_call_balance' : 'core_call', 100);
-			$lock->obtain();
-		} catch (UnableToObtainLockException $ex) {
-			throw new CoreCallException('Unable to obtain core lock.');
+		if (!in_array($operation, ['livedata', 'fastdata'])) {
+			try {
+				$lock = new ExclusiveLock($operation == 'balance' ? 'core_call_balance' : 'core_call', 100);
+				$lock->obtain();
+			} catch (UnableToObtainLockException $ex) {
+				throw new CoreCallException('Unable to obtain core lock.');
+			}
 		}
 
 		$data = @file_get_contents($url . '?' . http_build_query($arguments), false, stream_context_create(['http' => ['timeout' => 350]]));
 		if (!$data) {
-			$lock->release();
+			if (isset($lock))
+				$lock->release();
 			throw new CoreCallException('Unable to call openxdagpool-scripts core.');
 		}
 
-		$lock->release();
+		if (isset($lock))
+			$lock->release();
 		return $data;
 	}
 }
