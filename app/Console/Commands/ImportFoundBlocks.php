@@ -26,6 +26,12 @@ class ImportFoundBlocks extends Command
 
 	public function handle()
 	{
+		if (env('DISABLE_BLOCKS_IMPORT')) {
+			$this->line('Blocks import is disabled in .env file.');
+			$this->info('ImportFoundBlocks completed successfully.');
+			return;
+		}
+
 		$core = new Core;
 		$config = new ConfigParser($this->reader->getLiveDataJson());
 
