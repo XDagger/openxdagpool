@@ -18,7 +18,7 @@ class Core
 			$lock = new ExclusiveLock($operation == 'balance' ? 'core_call_balance' : 'core_call', 100);
 			$lock->obtain();
 		} catch (UnableToObtainLockException $ex) {
-			throw new CoreCallException('Unable to obtain core_call lock.');
+			throw new CoreCallException('Unable to obtain core lock.');
 		}
 
 		$data = @file_get_contents($url . '?' . http_build_query($arguments), false, stream_context_create(['http' => ['timeout' => 350]]));
