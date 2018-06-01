@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
 		Commands\CreateDataSnapshot::class,
 		Commands\PoolCron::class,
 		Commands\ImportFoundBlocks::class,
+		Commands\TruncateFoundBlocks::class,
 		Commands\SaveMinerStats::class,
 		Commands\SavePoolStats::class,
 		Commands\SendMinerAlerts::class,
