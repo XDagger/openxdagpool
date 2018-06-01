@@ -15,7 +15,7 @@ class Core
 		$arguments['operation'] = $operation;
 
 		try {
-			$lock = new ExclusiveLock('core_call', 100);
+			$lock = new ExclusiveLock($operation == 'balance' ? 'core_call_balance' : 'core_call', 100);
 			$lock->obtain();
 		} catch (UnableToObtainLockException $ex) {
 			throw new CoreCallException('Unable to obtain core_call lock.');
