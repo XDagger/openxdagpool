@@ -55,7 +55,7 @@ Perform the following steps in order to get the website up and running:
 3. install mysql 5.7 or mariadb. Create new database, for example `openxdagpool`, with `CREATE DATABASE openxdagpool CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;` run as mysql's `root` user. Grant all privileges to a new user: `GRANT ALL ON openxdagpool.* TO openxdagpool@'%' IDENTIFIED BY 'PWD!!!!';`. Choose your own password!
 4. install nginx and set up a PHP FPM pool running as user of your choice.
 5. configure nginx to properly execute this website
-6. install [composer](https://getcomposer.org/download/) and [npm 8.x](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+6. install [composer](https://getcomposer.org/download/) and [nodejs 8.x](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 7. clone this project into `/var/www/openxdagpool`. Proceed as `www-data` or other user that the PHP FPM pool runs as
 8. `cp .env.example .env`
 9. edit `.env` and set up correct values, read the comments for help. Mail settings are required for e-mail alerts to work properly.
