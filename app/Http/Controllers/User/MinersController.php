@@ -75,7 +75,7 @@ class MinersController extends Controller
 			$miner->email_alerts = (boolean) $alerts[$miner->uuid];
 
 			if ($miner->email_alerts) {
-				$miners_parser = $miners_parser ?? new MinersParser($reader->getMiners());
+				$miners_parser = $miners_parser ?? new MinersParser($reader->getFastDataJson());
 				$pool_miner = $miners_parser->getMiner($miner->address);
 
 				$miner->seen_online = $pool_miner !== null;
