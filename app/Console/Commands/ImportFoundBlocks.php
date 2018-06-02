@@ -39,9 +39,10 @@ class ImportFoundBlocks extends Command
 		$fee = 1024 * ($config->getFee() / 100);
 
 		$imported = $invalidated = 0;
+		$insert_payouts = [];
 
-		// import at most 20000 new found blocks / run
-		for ($i = 0; $i < 20000; $i++) {
+		// import at most 2000 new found blocks / run
+		for ($i = 0; $i < 2000; $i++) {
 			try {
 				$block_json = $core->call('block');
 			} catch (CoreCallException $ex) {
@@ -74,23 +75,36 @@ class ImportFoundBlocks extends Command
 			$block->precise_found_at = Carbon::parse($block_json['properties']['time']);
 			$block->save();
 
-			// insert payouts
+			// process payouts
 			foreach ($block_json['payouts'] as $payout) {
-				$new_payout = new Payout([
+				$made_at = Carbon::parse($payout['time']);
+
+				$insert_payouts[] = [
 					'found_block_id' => $block->id,
 					'recipient' => $payout['address'],
 					'amount' => $payout['amount'],
-				]);
+					'made_at' => $made_at->format('Y-m-d H:i:s'),
+					'made_at_milliseconds' => floor($made_at->micro / 1000),
+					'created_at' => $now = Carbon::now()->format('Y-m-d H:i:s'),
+					'updated_at' => $now,
+				];
+			}
 
-				$new_payout->precise_made_at = Carbon::parse($payout['time']);
-				$new_payout->save();
+			if (count($insert_payouts) > 1000) {
+				Payout::insert($insert_payouts);
+				$insert_payouts = [];
 			}
 
 			$imported++;
 		}
 
-		// invalidate at most 20000 found blocks / run
-		for ($i = 0; $i < 20000; $i++) {
+		if (count($insert_payouts) > 0) {
+			Payout::insert($insert_payouts);
+			$insert_payouts = [];
+		}
+
+		// invalidate at most 2000 found blocks / run
+		for ($i = 0; $i < 2000; $i++) {
 			try {
 				$block_json = $core->call('blockInvalidated');
 			} catch (CoreCallException $ex) {
