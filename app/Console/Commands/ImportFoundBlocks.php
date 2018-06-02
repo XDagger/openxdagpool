@@ -77,6 +77,9 @@ class ImportFoundBlocks extends Command
 
 			// process payouts
 			foreach ($block_json['payouts'] as $payout) {
+				if ($payout['amount'] == 0)
+					continue; // don't import payouts with  zero amount
+
 				$made_at = Carbon::parse($payout['time']);
 
 				$insert_payouts[] = [
