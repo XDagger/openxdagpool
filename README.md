@@ -63,7 +63,7 @@ Perform the following steps in order to get the website up and running:
 11. run `php artisan key:generate`
 12. run `php artisan migrate`
 13. run `npm install` and then `npm run production`
-14. run `php artisan data:live` and `php artisan data:fast`
+14. run `php artisan data:live` and `php artisan data:fast`, make sure these commands completed successfully. Then run `php artisan pool:cron`.
 15. install a letsencrypt certificate or other https certificate (optional)
 16. visit the web site, and register. First registered user is an administrator.
 17. visit the administration interface to set up your pool settings.
