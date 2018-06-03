@@ -35,9 +35,6 @@ class ImportFoundBlocks extends Command
 		$core = new Core;
 		$config = new ConfigParser($this->reader->getLiveDataJson());
 
-		// TODO: block reward may decrease in the future
-		$fee = 1024 * ($config->getFee() / 100);
-
 		$imported = $invalidated = 0;
 		$insert_payouts = [];
 
@@ -65,8 +62,8 @@ class ImportFoundBlocks extends Command
 				$block = new FoundBlock([
 					'address' => $block_json['properties']['balance_address'],
 					'hash' => $block_json['properties']['hash'],
-					'payout' => round(1024 - $fee, 2),
-					'fee' => round($fee, 2),
+					'payout' => 0,
+					'fee' => 0,
 				]);
 			} else {
 				$block->payouts()->delete();
@@ -76,6 +73,7 @@ class ImportFoundBlocks extends Command
 			$block->save();
 
 			// process payouts
+			$payouts_sum = 0;
 			foreach ($block_json['payouts'] as $payout) {
 				if ($payout['amount'] == 0)
 					continue; // don't import payouts with  zero amount
@@ -91,12 +89,18 @@ class ImportFoundBlocks extends Command
 					'created_at' => $now = Carbon::now()->format('Y-m-d H:i:s'),
 					'updated_at' => $now,
 				];
+
+				$payouts_sum += $payout['amount'];
 			}
 
 			if (count($insert_payouts) > 1000) {
 				Payout::insert($insert_payouts);
 				$insert_payouts = [];
 			}
+
+			$block->payout = $payouts_sum;
+			$block->fee = 1024 - $payouts_sum;
+			$block->save();
 
 			$imported++;
 		}
