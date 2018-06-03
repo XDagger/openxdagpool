@@ -34,7 +34,7 @@ good Laravel 5, webpack, mix, blade, sass, javascript and bulma experience is ne
 
 # Dependencies
 - pool version at least 0.2.1
-- nginx, php7+, mariadb or mysql, npm 8.x
+- nginx, php7+, mariadb or mysql, nodejs 8.x
 
 # How the pool website works
 The pool website periodically fetches required data from the pool daemon-side script. These scripts are in a [separate repository](https://github.com/XDagger/openxdagpool-scripts).
