@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Pool\{DataReader, Core, CoreCallException};
-use App\Pool\Config\Parser as ConfigParser;
 use App\FoundBlocks\FoundBlock;
 use App\Payouts\Payout;
 
@@ -33,7 +32,6 @@ class ImportFoundBlocks extends Command
 		}
 
 		$core = new Core;
-		$config = new ConfigParser($this->reader->getLiveDataJson());
 
 		$imported = $invalidated = 0;
 		$insert_payouts = [];
