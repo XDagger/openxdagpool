@@ -123,7 +123,7 @@
 							</div>
 						</nav>
 						<nav class="level is-mobile pool-blocks inactive-tab-stats">
-							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 4 hours. Click for details.">
+							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 5 minutes. Click for details.">
 								<div>
 									<p class="heading">Last month</p>
 									<p class="title">
@@ -131,7 +131,7 @@
 									</p>
 								</div>
 							</div>
-							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 4 hours. Click for details.">
+							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 5 minutes. Click for details.">
 								<div>
 									<p class="heading">Last week</p>
 									<p class="title">
@@ -139,7 +139,7 @@
 									</p>
 								</div>
 							</div>
-							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 4 hours. Click for details.">
+							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 5 minutes. Click for details.">
 								<div>
 									<p class="heading">Last day</p>
 									<p class="title">
@@ -147,7 +147,7 @@
 									</p>
 								</div>
 							</div>
-							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 4 hours. Approximate value based on last 20 blocks found. Click for a listing of latest found blocks.">
+							<div class="level-item has-text-centered tooltip is-tooltip-multiline" data-tooltip="Updates every 5 minutes. Approximate value based on last 20 blocks found. Click for a listing of latest found blocks.">
 								<div>
 									<p class="heading">Block every</p>
 									<p class="title">
@@ -242,7 +242,7 @@
 										<input class="input is-fullwidth" type="text" name="address" placeholder="Wallet address" maxlength="32" required>
 									</div>
 									<div class="control">
-										<button class="button tooltip is-tooltip-multiline" data-tooltip="Balances update every 30 minutes. Payouts update every 4 hours." type="submit">
+										<button class="button tooltip is-tooltip-multiline" data-tooltip="Balances and payouts update every 5 minutes." type="submit">
 											Show
 										</button>
 									</div>
