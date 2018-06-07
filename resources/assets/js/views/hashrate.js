@@ -29,14 +29,20 @@
 			data: {
 				json: this.json,
 				x: 'x',
-				xFormat: this.type == 'daily' ? '%Y-%m-%d' : '%Y-%m-%d %H:%M',
-				type: this.type == 'daily' ? 'bar' : 'line'
+				xFormat: this.type == 'daily' ? '%m-%d' : '%m-%d %H:%M',
+				type: this.type == 'daily' ? 'bar' : 'area-spline'
+			},
+			point: {
+				show: false
+			},
+			color: {
+				pattern: ['#778899', '#FF00FF', '#48D1CC']
 			},
 			axis: {
 				x: {
 					type: 'timeseries',
 					tick: {
-						format: this.type == 'daily' ? '%Y-%m-%d' : '%Y-%m-%d %H:%M'
+						format: this.type == 'daily' ? '%m-%d' : '%m-%d %H:%M'
 					}
 				}
 			}
