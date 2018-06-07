@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Pool\Formatter;
 use App\Pool\Statistics\Stat as PoolStat;
 use Auth;
+use Carbon\Carbon;
 
 class HashrateController extends Controller
 {
