@@ -31,6 +31,12 @@
 				xFormat: '%Y-%m-%d',
 				type: 'bar'
 			},
+			point: {
+				show: false
+			},
+			color: {
+				pattern: ['#778899', '#FF00FF', '#48D1CC']
+			},
 			axis: {
 				x: {
 					type: 'timeseries',
