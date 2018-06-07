@@ -137,7 +137,20 @@ class StatsController extends Controller
 		$found_blocks = ['x' => [], 'Found blocks' => []];
 		$blocks = FoundBlock::selectRaw('DATE_FORMAT(found_at, "%Y-%m-%d") date, count(*) count')->where('found_at', '>', Carbon::now()->subMonths(1))->groupBy(\DB::raw('DATE_FORMAT(found_at, "%Y-%m-%d")'))->get();
 
+		$last_date = null;
+
 		foreach ($blocks as $block) {
+			$date = Carbon::parse($day->date);
+
+			if ($last_date) {
+				while ($last_date->addDays(1) < $date) {
+					$graph['x'][] = $last_date->format('Y-m-d');
+					$graph['Found blocks'][] = 0;
+				}
+			}
+
+			$last_date = Carbon::parse($day->date);
+
 			$found_blocks['x'][] = $block->date;
 			$found_blocks['Found blocks'][] = $block->count;
 		}
