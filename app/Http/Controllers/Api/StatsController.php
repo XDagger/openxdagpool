@@ -122,7 +122,7 @@ class StatsController extends Controller
 		$stats = PoolStat::orderBy('id', 'asc')->where('created_at', '>', Carbon::now()->subDays(3))->get();
 
 		foreach ($stats as $stat) {
-			$datetime = $stat->created_at->subMinutes(5)->format('m-d H:i');
+			$datetime = $stat->created_at->subMinutes(5)->format('Y-m-d H:i');
 
 			$pool_hashrate['x'][] = $datetime;
 			$active_miners['x'][] = $datetime;
@@ -135,7 +135,7 @@ class StatsController extends Controller
 		}
 
 		$found_blocks = ['x' => [], 'Found blocks' => []];
-		$blocks = FoundBlock::selectRaw('DATE_FORMAT(found_at, "%m-%d") date, count(*) count')->where('found_at', '>', Carbon::now()->subMonths(1))->groupBy(\DB::raw('DATE_FORMAT(found_at, "%m-%d")'))->get();
+		$blocks = FoundBlock::selectRaw('DATE_FORMAT(found_at, "%Y-%m-%d") date, count(*) count')->where('found_at', '>', Carbon::now()->subMonths(1))->groupBy(\DB::raw('DATE_FORMAT(found_at, "%m-%d")'))->get();
 
 		foreach ($blocks as $block) {
 			$found_blocks['x'][] = $block->date;

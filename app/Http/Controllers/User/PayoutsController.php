@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use Auth, Excel, Setting;
+use Carbon\Carbon;
 
 class PayoutsController extends Controller
 {
@@ -167,7 +168,19 @@ class PayoutsController extends Controller
 		$graph = ['x' => [], 'Payout' => []];
 		$sum = 0;
 
+		$last_date = null;
+
 		foreach ($days as $day) {
+			$date = Carbon::parse($day->date);
+
+			if ($last_date) {
+				while ($last_date->addDays(1) < $date) {
+					$graph['x'][] = $last_date->format('Y-m-d');
+					$graph['Payout'][] = 0;
+				}
+			}
+
+			$last_date = Carbon::parse($day->date);
 			$graph['x'][] = $day->date;
 			$graph['Payout'][] = sprintf('%.09f', $day->total);
 			$sum += $day->total;

@@ -69,7 +69,7 @@
 			var load = self.loadChart.bind(self);
 			load('pool_hashrate_chart', 'pool-hashrate', json.pool_hashrate);
 			load('active_miners_chart', 'active-miners', json.active_miners);
-			load('found_blocks_chart', 'found-blocks', json.found_blocks, '%m-%d', 'bar');
+			load('found_blocks_chart', 'found-blocks', json.found_blocks, ['%Y-%m-%d', '%m-%d'], 'bar');
 			load('network_hashrate_chart', 'network-hashrate', json.network_hashrate);
 		});
 	}
@@ -84,7 +84,7 @@
 				data: {
 					json: json,
 					x: 'x',
-					xFormat: typeof xformat == 'undefined' ? '%m-%d %H:%M' : xformat,
+					xFormat: typeof xformat == 'undefined' ? '%Y-%m-%d %H:%M' : xformat[0],
 					type: typeof chart_type == 'undefined' ? 'area-spline' : 'bar'
 				},
 				point: {
@@ -97,7 +97,7 @@
 					x: {
 						type: 'timeseries',
 						tick: {
-							format: typeof xformat == 'undefined' ? '%m-%d %H:%M' : xformat
+							format: typeof xformat == 'undefined' ? '%m-%d %H:%M' : xformat[1]
 						}
 					}
 				}

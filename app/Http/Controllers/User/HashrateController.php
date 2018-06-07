@@ -59,9 +59,25 @@ class HashrateController extends Controller
 		else
 			$stats = $model->getLatestHashrate();
 
+		$last_date = null;
+
 		foreach ($stats as $stat) {
-			$graph['x'][] = is_array($stat) ? $stat['date'] : $stat->date;
-			$graph['Hashrate (Mh/s)'][] = (is_array($stat) ? $stat['hashrate'] : $stat->hashrate) / 1024 / 1024;
+			$date = is_array($stat) ? $stat['date'] : $stat->date;
+			$hashrate = (is_array($stat) ? $stat['hashrate'] : $stat->hashrate);
+
+			$current_date = Carbon::parse($date);
+
+			if ($last_date) {
+				while ($last_date->addDays(1) < $date) {
+					$graph['x'][] = $last_date->format($type == 'daily' ? 'Y-m-d' : 'Y-m-d H:00');
+					$graph['Hashrate (Mh/s)'][] = 0;
+				}
+			}
+
+			$last_date = Carbon::parse($date);
+
+			$graph['x'][] = $date;
+			$graph['Hashrate (Mh/s)'][] = $hashrate / 1024 / 1024;
 		}
 
 		return json_encode($graph);

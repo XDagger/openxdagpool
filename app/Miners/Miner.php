@@ -125,6 +125,6 @@ class Miner extends Model
 
 	public function getLatestHashrate()
 	{
-		return MinerStat::selectRaw('avg(hashrate) hashrate, DATE_FORMAT(created_at, "%m-%d %H:00") date')->where('miner_id', $this->id)->where('created_at', '>=', Carbon::now()->subDays(3))->groupBy('date')->orderBy('date')->get();
+		return MinerStat::selectRaw('avg(hashrate) hashrate, DATE_FORMAT(created_at, "%Y-%m-%d %H:00") date')->where('miner_id', $this->id)->where('created_at', '>=', Carbon::now()->subDays(3))->groupBy('date')->orderBy('date')->get();
 	}
 }

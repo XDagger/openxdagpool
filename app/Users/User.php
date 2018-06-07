@@ -118,6 +118,6 @@ class User extends Authenticatable
 	public function getLatestHashrate()
 	{
 		$miner_ids = $this->miners->pluck('id');
-		return \DB::select('select sum(hashrate) hashrate, date from (select avg(hashrate) hashrate, DATE_FORMAT(created_at, "%m-%d %H:00") date from miner_stats where created_at >= NOW() - INTERVAL 3 DAY and miner_id in (' . implode(', ', $miner_ids->count() ? $miner_ids->toArray() : [0]) . ') group by miner_id, date order by date) group by date');
+		return \DB::select('select sum(hashrate) hashrate, date from (select avg(hashrate) hashrate, DATE_FORMAT(created_at, "%Y-%m-%d %H:00") date from miner_stats where created_at >= NOW() - INTERVAL 3 DAY and miner_id in (' . implode(', ', $miner_ids->count() ? $miner_ids->toArray() : [0]) . ') group by miner_id, date order by date) group by date');
 	}
 }
