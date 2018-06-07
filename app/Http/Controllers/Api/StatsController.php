@@ -135,7 +135,7 @@ class StatsController extends Controller
 		}
 
 		$found_blocks = ['x' => [], 'Found blocks' => []];
-		$blocks = FoundBlock::selectRaw('DATE_FORMAT(found_at, "%Y-%m-%d") date, count(*) count')->where('found_at', '>', Carbon::now()->subMonths(1))->groupBy(\DB::raw('DATE_FORMAT(found_at, "%m-%d")'))->get();
+		$blocks = FoundBlock::selectRaw('DATE_FORMAT(found_at, "%Y-%m-%d") date, count(*) count')->where('found_at', '>', Carbon::now()->subMonths(1))->groupBy(\DB::raw('DATE_FORMAT(found_at, "%Y-%m-%d")'))->get();
 
 		foreach ($blocks as $block) {
 			$found_blocks['x'][] = $block->date;
