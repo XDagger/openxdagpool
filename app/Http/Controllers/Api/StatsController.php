@@ -140,7 +140,7 @@ class StatsController extends Controller
 		$last_date = null;
 
 		foreach ($blocks as $block) {
-			$date = Carbon::parse($day->date);
+			$date = Carbon::parse($block->date);
 
 			if ($last_date) {
 				while ($last_date->addDays(1) < $date) {
@@ -149,7 +149,7 @@ class StatsController extends Controller
 				}
 			}
 
-			$last_date = Carbon::parse($day->date);
+			$last_date = Carbon::parse($block->date);
 
 			$found_blocks['x'][] = $block->date;
 			$found_blocks['Found blocks'][] = $block->count;
