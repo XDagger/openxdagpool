@@ -29,7 +29,7 @@
 			data: {
 				json: this.json,
 				x: 'x',
-				xFormat: this.type == 'daily' ? '%m-%d' : '%m-%d %H:%M',
+				xFormat: this.type == 'daily' ? '%Y-%m-%d' : '%m-%d %H:%M',
 				type: this.type == 'daily' ? 'bar' : 'area-spline'
 			},
 			point: {
@@ -42,7 +42,7 @@
 				x: {
 					type: 'timeseries',
 					tick: {
-						format: this.type == 'daily' ? '%m-%d' : '%m-%d %H:%M'
+						format: this.type == 'daily' ? '%Y-%m-%d' : '%m-%d %H:%M'
 					}
 				}
 			}
