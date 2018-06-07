@@ -144,8 +144,8 @@ class StatsController extends Controller
 
 			if ($last_date) {
 				while ($last_date->addDays(1) < $date) {
-					$graph['x'][] = $last_date->format('Y-m-d');
-					$graph['Found blocks'][] = 0;
+					$found_blocks['x'][] = $last_date->format('Y-m-d');
+					$found_blocks['Found blocks'][] = 0;
 				}
 			}
 
