@@ -22,7 +22,7 @@ class DownloadLiveData extends Command
 		$this->downloadFiles();
 		$lock->release();
 
-		$self = explode('\\', __CLASS__);
+		$self = explode('\\', get_class($this));
 		$this->info(array_pop($self) . ' completed successfully.');
 	}
 
