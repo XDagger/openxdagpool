@@ -58,7 +58,7 @@ Perform the following steps in order to get the website up and running:
 6. install [composer](https://getcomposer.org/download/) and [nodejs 8.x](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 7. clone this project into `/var/www/openxdagpool`. Proceed as `www-data` or other user that the PHP FPM pool runs as
 8. `cp .env.example .env`
-9. edit `.env` and set up correct values, read the comments for help. Mail settings are required for e-mail alerts to work properly.
+9. edit `.env` and set up correct values, read the comments for help. Mail settings are required for e-mail alerts to work properly. Make sure to set `APP_DEBUG` to `false` for production usage.
 10. in `/var/www/openxdagpool`, run `composer install`
 11. run `php artisan key:generate`
 12. run `php artisan migrate`
