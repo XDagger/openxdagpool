@@ -36,7 +36,7 @@
 						<table class="table is-fullwidth">
 							<thead>
 								<tr>
-									<th class="tooltip" data-tooltip="Block payout was fully sent at this date and time.">Found at</th>
+									<th class="tooltip" data-tooltip="Block was found at this date and time.">Found at</th>
 									<th class="tooltip" data-tooltip="Found block's hash.">Hash</th>
 									<th class="tooltip" data-tooltip="Total payout given to miners and community fund.">Payout</th>
 									<th class="tooltip" data-tooltip="Pool's fee for this block.">Fee</th>
