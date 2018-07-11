@@ -17,6 +17,7 @@
 /storage/work_fastdata.json
 /storage/pooldata
 /storage/settings.json
+/storage/lock_*
 Homestead.json
 Homestead.yaml
 npm-debug.log
