@@ -55,10 +55,8 @@ class Parser extends BaseParser
 				} else {
 					$miner->addIpAndPort($m['ip_and_port']);
 					$miner->addInOutBytes(implode('/', $m['in_out_bytes']));
-					$miner->addUnpaidShares($m['unpaid_shares']);
-
-					if (isset($m['name']))
-						$miner->addName($m['name']);
+					$miner->addUnpaidShares($m['unpaid_shares'])
+					$miner->addName($m['name'] ?? '');
 
 					if (isset($m['hashrate']))
 						$miner->addHashrate($m['hashrate']);
@@ -90,9 +88,7 @@ class Parser extends BaseParser
 				$miners[$miner['address']]->addIpAndPort($miner['ip_and_port']);
 				$miners[$miner['address']]->addInOutBytes(implode('/', $miner['in_out_bytes']));
 				$miners[$miner['address']]->addUnpaidShares($miner['unpaid_shares']);
-
-				if (isset($miner['name']))
-					$miners[$miner['address']]->addName($miner['name']);
+				$miners[$miner['address']]->addName($miner['name'] ?? '');
 
 				if (isset($miner['hashrate']))
 					$miners[$miner['address']]->addHashrate($miner['hashrate']);
@@ -155,9 +151,7 @@ class Parser extends BaseParser
 				$miners[$ip][$miner['address']]->addIpAndPort($miner['ip_and_port']);
 				$miners[$ip][$miner['address']]->addInOutBytes(implode('/', $miner['in_out_bytes']));
 				$miners[$ip][$miner['address']]->addUnpaidShares($miner['unpaid_shares']);
-
-				if (isset($miner['name']))
-					$miners[$ip][$miner['address']]->addName($miner['name']);
+				$miners[$ip][$miner['address']]->addName($miner['name'] ?? '');
 
 				if (isset($miner['hashrate']))
 					$miners[$ip][$miner['address']]->addHashrate($miner['hashrate']);
