@@ -55,7 +55,7 @@ class Parser extends BaseParser
 				} else {
 					$miner->addIpAndPort($m['ip_and_port']);
 					$miner->addInOutBytes(implode('/', $m['in_out_bytes']));
-					$miner->addUnpaidShares($m['unpaid_shares'])
+					$miner->addUnpaidShares($m['unpaid_shares']);
 					$miner->addName($m['name'] ?? '');
 
 					if (isset($m['hashrate']))
