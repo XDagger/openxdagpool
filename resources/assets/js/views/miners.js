@@ -82,7 +82,7 @@
 
 				if (miner.ip_and_port) {
 					$(tr).data('ipAndPort', miner.ip_and_port);
-					$('.miner-address', tr).attr('data-tooltip', 'IP and port: ' + miner.ip_and_port + ', Address: ' + $(tr).data('address') + ($(tr).data('note') ? ', Note: ' + $(tr).data('note') : ''));
+					$('.miner-address', tr).attr('data-tooltip', $(tr).data('address') + ($(tr).data('note') ? ' (' + $(tr).data('note') + ')' : '') + ':\n' + miner.ip_and_port);
 				} else {
 					$(tr).data('ipAndPort', null);
 				}

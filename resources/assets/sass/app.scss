@@ -106,6 +106,6 @@ pre.oneline {
 	margin-top: 20px;
 }
 
-.admin-view .miners-grouped .tooltip:hover::after {
+.admin-view .miners-grouped .tooltip:hover::after, .miners-view .miners-list .miner-address.tooltip:hover::after {
 	white-space: pre-line;
 }

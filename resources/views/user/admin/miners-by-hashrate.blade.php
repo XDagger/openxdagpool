@@ -34,7 +34,7 @@
 			@foreach ($miners as $miner)
 				<tr>
 					<td><a href="#" class="miner-details" data-unpaid-shares="{{ $miner->getUnpaidShares() }}" data-in-out-bytes="{{ $miner->getInOutBytes() }}">{{ $miner->getAddress() }}</a></td>
-					<td class="tooltip is-tooltip-multiline is-tooltip-right ips-and-port" data-tooltip="{{ $miner->getIpsAndPort() }}">{{ $miner->getMachinesCount() }}</td>
+					<td class="tooltip is-tooltip-multiline is-tooltip-right ips-and-port" data-tooltip="{{ $miner->getIpsAndNames() }}">{{ $miner->getMachinesCount() }}</td>
 					<td>{{ $miner->getUnpaidShares() }}</td>
 					<td>{{ $format->hashrate($miner->getHashrate()) }}</td>
 					<td>
@@ -119,7 +119,7 @@
 				<div class="column">
 					<div class="field is-horizontal">
 						<div class="field-label">
-							<label class="label">Machines</label>
+							<label class="label">Workers</label>
 						</div>
 
 						<div class="field-body">

@@ -261,7 +261,7 @@
 						<div class="column">
 							<div class="field is-horizontal">
 								<div class="field-label">
-									<label class="label">IPs and ports</label>
+									<label class="label">Workers</label>
 								</div>
 
 								<div class="field-body">

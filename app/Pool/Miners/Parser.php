@@ -41,11 +41,14 @@ class Parser extends BaseParser
 		return $total;
 	}
 
-	public function getMiner($address)
+	public function getMiner($address, &$version_gt_024 = null)
 	{
 		$miner = null;
 
-		$this->forEachMiner(function($m) use ($address, &$miner) {
+		$this->forEachMiner(function($m) use ($address, &$miner, &$version_gt_024) {
+			if (isset($m['hashrate']))
+				$version_gt_024 = true;
+
 			if ($m['address'] === $address) {
 				if (!$miner) {
 					$miner = Miner::fromArray($m);
@@ -53,6 +56,12 @@ class Parser extends BaseParser
 					$miner->addIpAndPort($m['ip_and_port']);
 					$miner->addInOutBytes(implode('/', $m['in_out_bytes']));
 					$miner->addUnpaidShares($m['unpaid_shares']);
+
+					if (isset($m['name']))
+						$miner->addName($m['name']);
+
+					if (isset($m['hashrate']))
+						$miner->addHashrate($m['hashrate']);
 
 					if ($miner->getStatus() !== 'active' && $m['status'] === 'active')
 						$miner->setStatus($m['status']);
@@ -66,8 +75,9 @@ class Parser extends BaseParser
 	public function getMinersByHashrate($pool_hashrate)
 	{
 		$miners = [];
+		$version_gt_024 = false;
 
-		$this->forEachMiner(function($miner) use (&$miners) {
+		$this->forEachMiner(function($miner) use (&$miners, &$version_gt_024) {
 			if ($miner['address'] == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 				return;
 
@@ -78,10 +88,20 @@ class Parser extends BaseParser
 				$miners[$miner['address']]->addInOutBytes(implode('/', $miner['in_out_bytes']));
 				$miners[$miner['address']]->addUnpaidShares($miner['unpaid_shares']);
 
+				if (isset($miner['name']))
+					$miners[$miner['address']]->addName($miner['name']);
+
+				if (isset($miner['hashrate'])) {
+					$version_gt_024 = true;
+					$miners[$miner['address']]->addHashrate($miner['hashrate']);
+				}
+
 				if ($miners[$miner['address']]->getStatus() !== 'active' && $miner['status'] === 'active')
 					$miners[$miner['address']]->setStatus($miner['status']);
 			}
 		});
+
+		$total_unpaid_shares = $this->getTotalUnpaidShares();
 
 		foreach ($miners as $address => $miner) {
 			if ($miner->getStatus() == 'free') {
@@ -89,11 +109,13 @@ class Parser extends BaseParser
 				continue;
 			}
 
-			$hashrate = 0;
-			if ($this->getTotalUnpaidShares() > 0)
-				$hashrate = ($miner->getUnpaidShares() / $this->getTotalUnpaidShares()) * $pool_hashrate;
+			if (!$version_gt_024) {
+				$hashrate = 0;
+				if ($total_unpaid_shares > 0)
+					$hashrate = ($miner->getUnpaidShares() / $total_unpaid_shares) * $pool_hashrate;
 
-			$miner->setHashrate($hashrate);
+				$miner->setHashrate($hashrate);
+			}
 		}
 
 		uasort($miners, function ($a, $b) {
@@ -106,11 +128,12 @@ class Parser extends BaseParser
 		return $miners;
 	}
 
-	public function getMinersByIp()
+	public function getMinersByIp($pool_hashrate)
 	{
 		$miners = [];
+		$version_gt_024 = false;
 
-		$this->forEachMiner(function($miner) use (&$miners) {
+		$this->forEachMiner(function($miner) use (&$miners, &$version_gt_024) {
 			if ($miner['address'] == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 				return;
 
@@ -129,13 +152,21 @@ class Parser extends BaseParser
 				$miners[$ip][$miner['address']]->addInOutBytes(implode('/', $miner['in_out_bytes']));
 				$miners[$ip][$miner['address']]->addUnpaidShares($miner['unpaid_shares']);
 
+				if (isset($miner['name']))
+					$miners[$ip][$miner['address']]->addName($miner['name']);
+
+				if (isset($miner['hashrate'])) {
+					$version_gt_024 = true;
+					$miners[$ip][$miner['address']]->addHashrate($miner['hashrate']);
+				}
+
 				if ($miners[$ip][$miner['address']]->getStatus() !== 'active' && $miner['status'] === 'active')
 					$miners[$ip][$miner['address']]->setStatus($miner['status']);
 			}
 		});
 
 		foreach ($miners as $ip => $list) {
-			$miners[$ip]['machines'] = $miners[$ip]['unpaid_shares'] = 0;
+			$miners[$ip]['machines'] = $miners[$ip]['unpaid_shares'] = $miners[$ip]['hashrate'] = 0;
 			$miners[$ip]['in_out_bytes'] = '0/0';
 			foreach ($list as $address => $miner) {
 				if ($miner->getStatus() == 'free') {
@@ -146,13 +177,28 @@ class Parser extends BaseParser
 				$miners[$ip]['machines'] += $miner->getMachinesCount();
 				$miners[$ip]['unpaid_shares'] += $miner->getUnpaidShares();
 
+				if ($version_gt_024)
+					$miners[$ip]['hashrate'] += $miner->getHashrate();
+
 				$bytes = explode('/', $miners[$ip]['in_out_bytes']);
 				$miner_bytes = explode('/', $miner->getInOutBytes());
 				$miners[$ip]['in_out_bytes'] = ($bytes[0] + $miner_bytes[0]) . '/' . ($bytes[1] + $miner_bytes[1]);
 			}
 
-			if (count($miners[$ip]) == 3)
+			if (count($miners[$ip]) == 4)
 				unset($miners[$ip]);
+		}
+
+		if (!$version_gt_024) {
+			$total_unpaid_shares = $this->getTotalUnpaidShares();
+
+			foreach ($miners as $ip => $list) {
+				$hashrate = 0;
+				if ($total_unpaid_shares > 0)
+					$hashrate = ($miners['ip']['unpaid_shares'] / $total_unpaid_shares) * $pool_hashrate;
+
+				$miners[$ip]['hashrate'] = $hashrate;
+			}
 		}
 
 		uasort($miners, function ($a, $b) {

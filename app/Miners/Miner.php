@@ -66,9 +66,19 @@ class Miner extends Model
 		if (!$when)
 			return $this->hashrate;
 
+		$hashrate = $this->getAveragingHashrate($when);
+
+		if ($augment)
+			return $this->getAugmentedHashrate($hashrate);
+
+		return $hashrate;
+	}
+
+	public function getAugmentedHashrate($hashrate)
+	{
 		$reference = new ReferenceHashrate();
-		$coefficient = $augment ? $reference->getCoefficient() : 1;
-		return $this->getAveragingHashrate($when) * $coefficient;
+
+		return $this->hashrate * $reference->getCoefficient();
 	}
 
 	protected function getAveragingHashrate(PoolStat $when)

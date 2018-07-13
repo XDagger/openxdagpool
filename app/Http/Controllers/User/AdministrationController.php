@@ -126,7 +126,7 @@ class AdministrationController extends Controller
 	{
 		$miners_parser = new MinersParser($reader->getFastDataJson());
 		$stats_parser = new StatsParser($reader->getLiveDataJson());
-		$ips = new Collection($miners_parser->getMinersByIp());
+		$ips = new Collection($miners_parser->getMinersByIp($stats_parser->getPoolHashrate()));
 		$page = $request->input('page', 1);
 		$ips = new LengthAwarePaginator($ips->forPage($page, 20), count($ips), 20, $page, ['path' => route('user.admin.miners-by-ip')]);
 
@@ -134,8 +134,6 @@ class AdministrationController extends Controller
 			'section' => 'miners-by-ip',
 			'ips' => $ips,
 			'format' => $format,
-			'pool_unpaid_shares' => $miners_parser->getTotalUnpaidShares(),
-			'pool_hashrate' => $stats_parser->getPoolHashrate(),
 		]);
 	}
 

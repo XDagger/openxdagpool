@@ -51,7 +51,7 @@ class SaveMinerStats extends Command
 				$miner->balance_updated_at = Carbon::now();
 			}
 
-			if (($pool_miner = $miners_parser->getMiner($miner->address)) === null) {
+			if (($pool_miner = $miners_parser->getMiner($miner->address, $version_gt_024)) === null) {
 				$miner->fill([
 					'status' => 'offline',
 					'ip_and_port' => null,
@@ -87,11 +87,17 @@ class SaveMinerStats extends Command
 				continue;
 			}
 
+			if ($version_gt_024) {
+				$hashrate = $pool_miner->getStatus() === 'active' ? $miner->getAugmentedHashrate($pool_miner->getHashrate()) : $pool_miner->getHashrate();
+			} else {
+				$hashrate = $miner->getEstimatedHashrate($stat, $pool_miner->getStatus() === 'active');
+			}
+
 			$miner->fill([
 				'status' => $pool_miner->getStatus(),
-				'ip_and_port' => $pool_miner->getIpsAndPort(),
+				'ip_and_port' => $pool_miner->getIpsAndNames(),
 				'machines_count' => $pool_miner->getMachinesCount(),
-				'hashrate' => $hashrate = $miner->getEstimatedHashrate($stat, $pool_miner->getStatus() === 'active'),
+				'hashrate' => $hashrate,
 				'average_hashrate' => $pool_miner->getStatus() === 'active' ? $miner->getAverageHashrate($stat) : $hashrate,
 				'unpaid_shares' => $pool_miner->getUnpaidShares(),
 				'balance' => $balance,

@@ -24,9 +24,9 @@
 		<thead>
 			<tr>
 				<th>IP address</th>
-				<th class="tooltip is-tooltip-multiline" data-tooltip="Miners connected from this IP, their addresses and ports.">Miners</th>
+				<th class="tooltip is-tooltip-multiline" data-tooltip="Miners connected from this IP.">Miners</th>
 				<th class="tooltip is-tooltip-multiline" data-tooltip="Current estimated hashrate. The value is not averaged or corrected by any means.">Hashrate</th>
-				<th class="tooltip is-tooltip-multiline" data-tooltip="Registered users connected from this IP, and their miner addresses.">Users</th>
+				<th class="tooltip is-tooltip-multiline" data-tooltip="Registered users connected from this IP.">Users</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -34,23 +34,19 @@
 				<tr>
 					<td><a href="#" class="ip-address-details" data-unpaid-shares="{{ $data['unpaid_shares'] }}" data-in-out-bytes="{{ $data['in_out_bytes'] }}">{{ $ip }}</a></td>
 					<td class="tooltip is-tooltip-multiline is-tooltip-right ip-miners" data-tooltip="@foreach ($data as $key => $miner)
-						@if ($key == 'machines' || $key == 'unpaid_shares' || $key == 'in_out_bytes')
+						@if ($key == 'machines' || $key == 'unpaid_shares' || $key == 'in_out_bytes' || $key == 'hashrate')
 							@continue
 						@endif
 						{{ $miner->getAddress() }}:
-						{{ $miner->getIpsAndPort() }}
+						{{ $miner->getIpsAndNames() }}
 					@endforeach">{{ $data['machines'] }}</td>
 					<td>
-						@if ($pool_unpaid_shares == 0)
-							-
-						@else
-							{{ $format->hashrate(($data['unpaid_shares'] / $pool_unpaid_shares) * $pool_hashrate) }}
-						@endif
+						{{ $format->hashrate($data['hashrate']) }}
 					</td>
 					<td>
 						@php($users = [])
 						@foreach ($data as $key => $miner)
-							@if ($key == 'machines' || $key == 'unpaid_shares' || $key == 'in_out_bytes')
+							@if ($key == 'machines' || $key == 'unpaid_shares' || $key == 'in_out_bytes' || $key == 'hashrate')
 								@continue
 							@endif
 							@php($users = array_merge($users, $miner->getUsers()))
@@ -136,7 +132,7 @@
 				<div class="column">
 					<div class="field is-horizontal">
 						<div class="field-label">
-							<label class="label">Miners</label>
+							<label class="label">Workers</label>
 						</div>
 
 						<div class="field-body">
