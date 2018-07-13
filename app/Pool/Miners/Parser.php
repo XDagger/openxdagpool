@@ -195,7 +195,7 @@ class Parser extends BaseParser
 			foreach ($miners as $ip => $list) {
 				$hashrate = 0;
 				if ($total_unpaid_shares > 0)
-					$hashrate = ($miners['ip']['unpaid_shares'] / $total_unpaid_shares) * $pool_hashrate;
+					$hashrate = ($miners[$ip]['unpaid_shares'] / $total_unpaid_shares) * $pool_hashrate;
 
 				$miners[$ip]['hashrate'] = $hashrate;
 			}
