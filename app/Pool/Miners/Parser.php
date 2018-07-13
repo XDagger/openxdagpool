@@ -81,6 +81,9 @@ class Parser extends BaseParser
 			if ($miner['address'] == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 				return;
 
+			if (isset($miner['hashrate']))
+				$version_gt_024 = true;
+
 			if (!isset($miners[$miner['address']])) {
 				$miners[$miner['address']] = Miner::fromArray($miner);
 			} else {
@@ -91,10 +94,8 @@ class Parser extends BaseParser
 				if (isset($miner['name']))
 					$miners[$miner['address']]->addName($miner['name']);
 
-				if (isset($miner['hashrate'])) {
-					$version_gt_024 = true;
+				if (isset($miner['hashrate']))
 					$miners[$miner['address']]->addHashrate($miner['hashrate']);
-				}
 
 				if ($miners[$miner['address']]->getStatus() !== 'active' && $miner['status'] === 'active')
 					$miners[$miner['address']]->setStatus($miner['status']);
@@ -137,6 +138,9 @@ class Parser extends BaseParser
 			if ($miner['address'] == 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 				return;
 
+			if (isset($miner['hashrate']))
+				$version_gt_024 = true;
+
 			list($ip, $port) = explode(':', $miner['ip_and_port']);
 
 			if ($ip === '0.0.0.0' && $port === '0')
@@ -155,10 +159,8 @@ class Parser extends BaseParser
 				if (isset($miner['name']))
 					$miners[$ip][$miner['address']]->addName($miner['name']);
 
-				if (isset($miner['hashrate'])) {
-					$version_gt_024 = true;
+				if (isset($miner['hashrate']))
 					$miners[$ip][$miner['address']]->addHashrate($miner['hashrate']);
-				}
 
 				if ($miners[$ip][$miner['address']]->getStatus() !== 'active' && $miner['status'] === 'active')
 					$miners[$ip][$miner['address']]->setStatus($miner['status']);
