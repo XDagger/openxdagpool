@@ -24,7 +24,7 @@
 		<thead>
 			<tr>
 				<th>IP address</th>
-				<th class="tooltip is-tooltip-multiline" data-tooltip="Miners connected from this IP.">Miners</th>
+				<th class="tooltip is-tooltip-multiline" data-tooltip="Workers connected from this IP.">Workers</th>
 				<th class="tooltip is-tooltip-multiline" data-tooltip="Current estimated hashrate. The value is not averaged or corrected by any means.">Hashrate</th>
 				<th class="tooltip is-tooltip-multiline" data-tooltip="Registered users connected from this IP.">Users</th>
 			</tr>

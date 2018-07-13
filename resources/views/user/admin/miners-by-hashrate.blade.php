@@ -24,7 +24,7 @@
 		<thead>
 			<tr>
 				<th>Miner address</th>
-				<th>Machines</th>
+				<th>Workers</th>
 				<th>Unpaid shares</th>
 				<th class="tooltip is-tooltip-multiline" data-tooltip="Current estimated hashrate. The value is not averaged or corrected by any means.">Hashrate</th>
 				<th class="tooltip is-tooltip-multiline" data-tooltip="Miner address is registered to these user accounts.">Users</th>
