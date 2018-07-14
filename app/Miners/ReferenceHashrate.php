@@ -21,12 +21,17 @@ class ReferenceHashrate
 		if (!$this->shouldBeUsed())
 			return $this->resetCoefficient();
 
-		$pool_miner = $miners_parser->getMiner($this->miner_address);
+		$pool_miner = $miners_parser->getMiner($this->miner_address, $version_gt_024);
 		if (!$pool_miner || $pool_miner->getStatus() !== 'active')
 			return $this->resetCoefficient();
 
 		$miner = Miner::where('address', $this->miner_address)->first();
-		$miner_hashrate = $miner->getEstimatedHashrate($when, false);
+
+		if (!$version_gt_024)
+			$miner_hashrate = $miner->getEstimatedHashrate($when, false);
+		else
+			$miner_hashrate = $pool_miner->getHashrate();
+
 		if ($miner_hashrate <= 0)
 			return $this->resetCoefficient();
 
