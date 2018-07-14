@@ -78,7 +78,7 @@ class Miner extends Model
 	{
 		$reference = new ReferenceHashrate();
 
-		return $this->hashrate * $reference->getCoefficient();
+		return $hashrate * $reference->getCoefficient();
 	}
 
 	protected function getAveragingHashrate(PoolStat $when)
