@@ -37,16 +37,21 @@ class Miner
 		return $this->status;
 	}
 
-	public function getIpsAndPort()
-	{
-		return implode(', ', $this->ips);
-	}
-
-	public function getIpsAndNames()
+	public function getIpsAndNames($anonymous = false)
 	{
 		$result = '';
-		foreach ($this->ips as $key => $ip)
+		foreach ($this->ips as $key => $ip) {
+			if ($anonymous && $ip !== '0.0.0.0:0') {
+				$ip = explode('.', $ip);
+
+				if (count($ip) == 4)
+					$ip[1] = $ip[2] = '';
+
+				$ip = implode('.', $ip);
+			}
+
 			$result .= $ip . ($this->names[$key] !== '' ? ' - ' . $this->names[$key] : '') . "\n";
+		}
 
 		return trim($result);
 	}

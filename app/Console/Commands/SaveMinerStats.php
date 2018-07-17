@@ -95,7 +95,7 @@ class SaveMinerStats extends Command
 
 			$miner->fill([
 				'status' => $pool_miner->getStatus(),
-				'ip_and_port' => $pool_miner->getIpsAndNames(),
+				'ip_and_port' => $pool_miner->getIpsAndNames(Miner::where('address', $miner->address)->count() > 1),
 				'machines_count' => $pool_miner->getMachinesCount(),
 				'hashrate' => $hashrate,
 				'average_hashrate' => $pool_miner->getStatus() === 'active' ? $miner->getAverageHashrate($stat) : $hashrate,
