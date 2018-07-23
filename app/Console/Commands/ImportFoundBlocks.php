@@ -47,7 +47,7 @@ class ImportFoundBlocks extends Command
 
 			$block_json = @json_decode($block_json, true);
 
-			if ($block_json === false || $block_json === null) {
+			if ($block_json === null) {
 				$this->line('Stopped importing blocks - unable to parse response json.');
 				break;
 			}
@@ -119,7 +119,7 @@ class ImportFoundBlocks extends Command
 
 			$block_json = @json_decode($block_json, true);
 
-			if ($block_json === false) {
+			if ($block_json === null) {
 				$this->line('Stopped invalidating found blocks - unable to parse response json.');
 				break;
 			}
