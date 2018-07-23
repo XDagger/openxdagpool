@@ -66,7 +66,7 @@ class StatsController extends Controller
 
 		$pool_stat = PoolStat::orderBy('id', 'desc')->first();
 
-		$last_blocks = FoundBlock::orderBy('id', 'desc')->where('found_at', '>', Carbon::now()->subDays(3))->limit(20)->get();
+		$last_blocks = FoundBlock::orderBy('found_at', 'desc')->where('found_at', '>', Carbon::now()->subDays(3))->limit(20)->get();
 		if (count($last_blocks) >= 2) {
 			$found_at_first = $last_blocks->first()->found_at;
 			$found_at_last = $last_blocks->last()->found_at;
