@@ -27,7 +27,7 @@ class DataReader
 	protected function json($data)
 	{
 		$data = @json_decode($data, true);
-		if ($data === false)
+		if ($data === null)
 			throw new DataReaderException('Invalid json.');
 
 		return $data;
