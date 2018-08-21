@@ -90,5 +90,6 @@ Done! Enjoy your new OpenXDAGPool instance! ;-)
 # Updates
 Whenever you update the code using `git pull`, observe changed files. If `.env.example` changed, observe the changes and modify your `.env` file appropriately.
 If any file in the `database/migrations` folder changed, you need to run `php artisan migrate`. When any file under `resources/assets` changed, you need to
-run `npm run production`. After every `git pull`, run `supervisorctl restart laravel-worker:*` as `root`. If you change your `.env` file even without
-updating the application, don't forget to run `supervisorctl restart laravel-worker:*` as `root` for the changes to take place in your queue as well.
+run `npm run production`. After every `git pull`, run `php artisan cache:clear` and `supervisorctl restart laravel-worker:*` as `root`.
+If you change your `.env` file even without updating the application, don't forget to run `php artisan cache:clear` and `supervisorctl restart laravel-worker:*`
+as `root` for the changes to take place in your queue as well.
