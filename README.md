@@ -83,7 +83,7 @@ redirect_stderr=true
 stdout_logfile=/var/www/openxdagpool/storage/logs/worker.log
 EOD
 ```
-21. execute as `root`: `supervisorctl start laravel-worker:*`
+21. execute as `root`: `supervisorctl reread`, `supervisorctl update`, `supervisorctl start laravel-worker:*`
 
 Done! Enjoy your new OpenXDAGPool instance! ;-)
 
