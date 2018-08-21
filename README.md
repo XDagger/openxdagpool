@@ -77,7 +77,7 @@ process_name=%(program_name)s_%(process_num)02d
 command=php /var/www/openxdagpool/artisan queue:work --sleep=3 --tries=3
 autostart=true
 autorestart=true
-user=!!!! REPLACE with the same user as the PHP FPM pool runs as !!!
+user=!!!! REPLACE with the same user as the PHP FPM pool runs as !!!!
 numprocs=1
 redirect_stderr=true
 stdout_logfile=/var/www/openxdagpool/storage/logs/worker.log
