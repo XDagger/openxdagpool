@@ -3,10 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
 use Setting, Carbon\Carbon;
-use App\Mail\UserMessage;
+use App\Jobs\SendUserMessage;
 use App\Miners\ReferenceHashrate;
 use App\Users\User;
 
@@ -103,7 +102,7 @@ class SendAdminAlerts extends Command
 	{
 		foreach ($this->users as $user) {
 			$this->line("Sending '$subject' notification to admin email '{$user->email}'...");
-			Mail::to($user->email, $user->nick)->send(new UserMessage($user, $subject, $message));
+			SendUserMessage::dispatch($user->id, $subject, $message);
 		}
 
 		$last_sent_at = Carbon::now();

@@ -51,7 +51,7 @@ This installation guide gives an overview on how to get the pool website up and 
 
 Perform the following steps in order to get the website up and running:
 1. set your system timezone to `UTC`, execute `dpkg-reconfigure tzdata` and choose `UTC`
-2. install all PHP7.0 requirements, for Ubuntu 16.04, use `apt-get install php7.0-bcmath php7.0-cli php7.0-common php7.0-fpm php7.0-json php7.0-mbstring php7.0-mcrypt php7.0-mysql php7.0-opcache php7.0-readline php7.0-sqlite3 php7.0-xml php7.0-zip autoconf libtool nasm`. Next configure `php.ini` to your preference. Set `memory_limit` to at least `256M`, `expose_php` to `Off`, set `error_reporting` to `E_ALL`.
+2. install all PHP7.0 requirements, for Ubuntu 16.04, use `apt-get install php7.0-bcmath php7.0-cli php7.0-common php7.0-fpm php7.0-json php7.0-mbstring php7.0-mcrypt php7.0-mysql php7.0-opcache php7.0-readline php7.0-sqlite3 php7.0-xml php7.0-zip autoconf libtool nasm supervisor`. Next configure `php.ini` to your preference. Set `memory_limit` to at least `256M`, `expose_php` to `Off`, set `error_reporting` to `E_ALL`.
 3. install mysql 5.7 or mariadb. Create new database, for example `openxdagpool`, with `CREATE DATABASE openxdagpool CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;` run as mysql's `root` user. Grant all privileges to a new user: `GRANT ALL ON openxdagpool.* TO openxdagpool@'%' IDENTIFIED BY 'PWD!!!!';`. Choose your own password!
 4. install nginx and set up a PHP FPM pool running as user of your choice.
 5. configure nginx to properly execute this website
@@ -69,5 +69,26 @@ Perform the following steps in order to get the website up and running:
 17. visit the administration interface to set up your pool settings.
 18. payouts exports of large datasets require the mysql files privilege. Edit `/etc/mysql/mysql.conf.d/mysqld.cnf` and in the `[mysqld]` section, add `secure-file-priv=/var/www/openxdagpool/public/payouts/`. Then execute `GRANT FILE ON *.* TO openxdagpool@'%';` as mysql's `root` user. Restart the mysql daemon using `service mysql restart` as `root`. Execute `chmod 777 /var/www/openxdagpool/public/payouts/` as `root`.
 19. as the PHP FPM pool user, execute `crontab -e` and enter one cron line: `* * * * * php /var/www/openxdagpool/artisan schedule:run >> /dev/null 2>&1`
+20. execute as `root`, replacing the `user` with the same user the PHP FPM pool runs as:
+```
+cat << 'EOD' > /etc/supervisor/conf.d/laravel-worker.conf
+[program:laravel-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/openxdagpool/artisan queue:work --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user=!!!! REPLACE with the same user as the PHP FPM pool runs as !!!
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/var/www/openxdagpool/storage/logs/worker.log
+EOD
+```
+21. execute as `root`: `supervisorctl start laravel-worker:*`
 
 Done! Enjoy your new OpenXDAGPool instance! ;-)
+
+# Updates
+Whenever you update the code using `git pull`, observe changed files. If `.env.example` changed, observe the changes and modify your `.env` file appropriately.
+If any file in the `database/migrations` folder changed, you need to run `php artisan migrate`. When any file under `resources/assets` changed, you need to
+run `npm run production`. After every `git pull`, run `supervisorctl restart laravel-worker:*` as `root`. If you change your `.env` file even without
+updating the application, don't forget to run `supervisorctl restart laravel-worker:*` as `root` for the changes to take place in your queue as well.

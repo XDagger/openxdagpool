@@ -9,9 +9,8 @@ use App\Pool\Miners\Parser as MinersParser;
 use App\Pool\Statistics\Parser as StatsParser;
 use App\Pool\State\Parser as StateParser;
 use App\Http\Requests\{UpdateUser, SaveSettings, SendMassEmail};
-use App\Mail\UserMessage;
+use App\Jobs\SendUserMessage;
 
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -117,7 +116,7 @@ class AdministrationController extends Controller
 			$users = User::where('active', true)->get();
 
 		foreach ($users as $user)
-			Mail::to($user->email, $user->nick)->send(new UserMessage($user, $request->input('subject'), $request->input('content')));
+			SendUserMessage::dispatch($user->id, $request->input('subject'), $request->input('content'));
 
 		return redirect()->back()->with('success', 'E-mail successfully sent to ' . count($users) . ' users.');
 	}

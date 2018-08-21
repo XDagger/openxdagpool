@@ -5,12 +5,10 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Miners\Miner;
-use App\Mail\{MinerWentOffline, MinerBackOnline};
+use App\Jobs\{SendMinerOfflineEmail, SendMinerOnlineEmail};
 
 use App\Pool\DataReader;
 use App\Pool\Statistics\Parser as StatisticsParser;
-
-use Illuminate\Support\Facades\Mail;
 
 class SendMinerAlerts extends Command
 {
@@ -42,13 +40,13 @@ class SendMinerAlerts extends Command
 				$miner->seen_online = false;
 				$miner->save();
 
-				Mail::to($miner->user->email, $miner->user->nick)->send(new MinerWentOffline($miner));
+				SendMinerOfflineEmail::dispatch($miner->id);
 			} else if ($miner->status !== 'offline' && !$miner->seen_online) {
 				$this->line("Sending 'back online' notification for miner '{$miner->address}' to '{$miner->user->email}'...");
 				$miner->seen_online = true;
 				$miner->save();
 
-				Mail::to($miner->user->email, $miner->user->nick)->send(new MinerBackOnline($miner));
+				SendMinerOnlineEmail::dispatch($miner->id);
 			}
 		}
 
