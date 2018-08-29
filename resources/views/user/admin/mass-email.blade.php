@@ -45,6 +45,46 @@
 
 				<div class="field is-horizontal">
 					<div class="field-label">
+						<label class="label">Address contains</label>
+					</div>
+
+					<div class="field-body">
+						<div class="field tooltip is-tooltip-multiline" data-tooltip="Send e-mail only to user's e-mail addresses that contain given phrase, for example 'domain.com'.">
+							<p class="control">
+								<input class="input" type="text" id="contains" name="contains" value="{{ old('contains') }}">
+							</p>
+
+							@if ($errors->has('filter'))
+								<p class="help is-danger">
+									{{ $errors->first('filter') }}
+								</p>
+							@endif
+						</div>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<div class="field-label">
+						<label class="label">Address doesn't contain</label>
+					</div>
+
+					<div class="field-body">
+						<div class="field tooltip is-tooltip-multiline" data-tooltip="Send e-mail only to user's e-mail addresses that DO NOT contain given phrase, for example 'foobar.com'.">
+							<p class="control">
+								<input class="input" type="text" id="except" name="except" value="{{ old('except') }}">
+							</p>
+
+							@if ($errors->has('filter'))
+								<p class="help is-danger">
+									{{ $errors->first('filter') }}
+								</p>
+							@endif
+						</div>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<div class="field-label">
 						<label class="label">E-mail subject</label>
 					</div>
 

@@ -111,9 +111,19 @@ class AdministrationController extends Controller
 		if ($request->input('active'))
 			$users = User::where('active', true)->whereHas('miners', function ($query) {
 				$query->where('status', 'active');
-			})->get();
+			});
 		else
-			$users = User::where('active', true)->get();
+			$users = User::where('active', true);
+
+		if ($contains = $request->input('contains')) {
+			$users = $users->where('email', 'like', '%' . $contains . '%');
+		}
+
+		if ($except = $request->input('except')) {
+			$users = $users->where('email', 'not like', '%' . $except . '%');
+		}
+
+		$users = $users->get();
 
 		foreach ($users as $user)
 			SendUserMessage::dispatch($user->id, $request->input('subject'), $request->input('content'));
