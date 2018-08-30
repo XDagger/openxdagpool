@@ -138,7 +138,7 @@ class ImportFoundBlocks extends Command
 		}
 
 		$this->line('Imported ' . $imported . ' found blocks.');
-		$this->line('Ivalidated ' . $invalidated . ' already imported found blocks.');
+		$this->line('Invalidated ' . $invalidated . ' already imported found blocks.');
 		$this->info('ImportFoundBlocks completed successfully.');
 	}
 }
