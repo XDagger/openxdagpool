@@ -54,9 +54,9 @@
 								<input class="input" type="text" id="contains" name="contains" value="{{ old('contains') }}">
 							</p>
 
-							@if ($errors->has('filter'))
+							@if ($errors->has('contains'))
 								<p class="help is-danger">
-									{{ $errors->first('filter') }}
+									{{ $errors->first('contains') }}
 								</p>
 							@endif
 						</div>
@@ -74,9 +74,29 @@
 								<input class="input" type="text" id="except" name="except" value="{{ old('except') }}">
 							</p>
 
-							@if ($errors->has('filter'))
+							@if ($errors->has('except'))
 								<p class="help is-danger">
-									{{ $errors->first('filter') }}
+									{{ $errors->first('except') }}
+								</p>
+							@endif
+						</div>
+					</div>
+				</div>
+
+				<div class="field is-horizontal">
+					<div class="field-label">
+						<label class="label">E-mails / hour</label>
+					</div>
+
+					<div class="field-body">
+						<div class="field tooltip is-tooltip-multiline" data-tooltip="Send at most this number of e-mails per hour. E-mails that are over limit will be sent in next hours.">
+							<p class="control">
+								<input class="input" type="number" min="0" max="5000" step="1" id="emails_per_hour" name="emails_per_hour" value="{{ old('emails_per_hour') }}">
+							</p>
+
+							@if ($errors->has('emails_per_hour'))
+								<p class="help is-danger">
+									{{ $errors->first('emails_per_hour') }}
 								</p>
 							@endif
 						</div>

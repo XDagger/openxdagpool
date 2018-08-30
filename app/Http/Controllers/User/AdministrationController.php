@@ -116,17 +116,27 @@ class AdministrationController extends Controller
 			$users = User::where('active', true);
 
 		if ($contains = $request->input('contains')) {
-			$users = $users->where('email', 'like', '%' . $contains . '%');
+			$users = $users->where('email', 'like', '%' . str_replace(['_', '%'], ['\_', '\%'], $contains) . '%');
 		}
 
 		if ($except = $request->input('except')) {
-			$users = $users->where('email', 'not like', '%' . $except . '%');
+			$users = $users->where('email', 'not like', '%' . str_replace(['_', '%'], ['\_', '\%'], $except) . '%');
 		}
 
 		$users = $users->get();
+		$email_number = $delay_hours = 0;
+		$emails_per_hour = max(0, intval($request->input('emails_per_hour')));
 
-		foreach ($users as $user)
-			SendUserMessage::dispatch($user->id, $request->input('subject'), $request->input('content'));
+		foreach ($users as $user) {
+			$email_number++;
+
+			if ($emails_per_hour > 0 && $email_number > $emails_per_hour) {
+				$delay_hours++;
+				$email_number = 0;
+			}
+
+			SendUserMessage::dispatch($user->id, $request->input('subject'), $request->input('content'))->delay(now()->addHours($delay_hours));
+		}
 
 		return redirect()->back()->with('success', 'E-mail successfully sent to ' . count($users) . ' users.');
 	}
