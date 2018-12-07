@@ -13,17 +13,7 @@ class Kernel extends ConsoleKernel
 	 * @var array
 	 */
 	protected $commands = [
-		Commands\DownloadLiveData::class,
-		Commands\DownloadFastData::class,
-		Commands\CreateDataSnapshot::class,
-		Commands\PoolCron::class,
-		Commands\ImportFoundBlocks::class,
-		Commands\TruncateFoundBlocks::class,
-		Commands\SaveMinerStats::class,
-		Commands\SavePoolStats::class,
-		Commands\SendMinerAlerts::class,
-		Commands\SendAdminAlerts::class,
-		Commands\RemoveInactiveMinersHistory::class,
+		// commands are automatically loaded from the 'Commands' directory
 	];
 
 	/**
