@@ -74,7 +74,7 @@ class ImportFoundBlocks extends Command
 			$payouts_sum = 0;
 			foreach ($block_json['payouts'] as $payout) {
 				if ($payout['amount'] == 0)
-					continue; // don't import payouts with  zero amount
+					continue; // don't import payouts with zero amount
 
 				$made_at = Carbon::parse($payout['time']);
 
@@ -97,7 +97,7 @@ class ImportFoundBlocks extends Command
 			}
 
 			$block->payout = $payouts_sum;
-			$block->fee = 1024 - $payouts_sum;
+			$block->fee = ($payouts_sum > 128 ? 1024 : 128) - $payouts_sum;
 			$block->save();
 
 			$imported++;
